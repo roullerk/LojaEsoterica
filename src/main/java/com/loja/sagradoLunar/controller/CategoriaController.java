@@ -1,3 +1,5 @@
+package com.loja.sagradoLunar.controller;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +16,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.loja.sagradoLunar.model.Categoria;
+import com.loja.sagradoLunar.repository.CategoriaRepository;
+
 @RestController
 @RequestMapping("/categorias")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CategoriaController {
-    
+
     @Autowired
     private CategoriaRepository repository;
 
@@ -29,14 +34,14 @@ public class CategoriaController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Categoria> findByIdCategoria(@PathVariable long id) {
-        return  repository.findById(id)
-                            .map( resp -> ResponseEntity.ok(resp))
-                            .orElse(ResponseEntity.notFound().build());
+        return repository.findById(id)
+                .map(resp -> ResponseEntity.ok(resp))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/nome/{nome}")
     public ResponseEntity<List<Categoria>> findByNomeCategoria(@PathVariable String nome) {
-        return ResponseEntity.ok(repository.findByNomeContainingIgnoreCase(nome));
+        return ResponseEntity.ok(repository.findAllByNomeContainingIgnoreCase(nome));
     }
 
     @PostMapping
@@ -53,7 +58,5 @@ public class CategoriaController {
     public void deleteCategoria(@PathVariable long id) {
         repository.deleteById(id);
     }
-
-
 
 }
